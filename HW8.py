@@ -40,14 +40,26 @@ def load_rest_data(db):
 
 
 
-
 def plot_rest_categories(db):
     """
     This function accepts a file name of a database as a parameter and returns a dictionary. The keys should be the
     restaurant categories and the values should be the number of restaurants in each category. The function should
     also create a bar chart with restaurant categories and the count of number of restaurants in each category.
     """
-    pass
+    conn = sqlite3.connect(db)
+    cur = conn.cursor()
+    dct = {}
+    
+    cur.execute("SELECT category, id FROM categories")
+    result = cur.fetchall()
+    result = sorted(result)
+    for c in result:
+        # print(c)
+        cur.execute("SELECT count(*) FROM restaurants WHERE restaurants.category_id = ?", (c[1], ))
+        count = cur.fetchall()
+        dct[c[0]] = count[0][0]
+    # dct = sorted(dct, key = lambda t:t[0])
+    return(dct)
 
 def find_rest_in_building(building_num, db):
     '''
@@ -106,11 +118,11 @@ class TestHW8(unittest.TestCase):
         self.assertEqual(rest_data['M-36 Coffee Roasters Cafe'], self.rest_dict)
         self.assertEqual(len(rest_data), 25)
 
-    # def test_plot_rest_categories(self):
-    #     cat_data = plot_rest_categories('South_U_Restaurants.db')
-    #     self.assertIsInstance(cat_data, dict)
-    #     self.assertEqual(cat_data, self.cat_dict)
-    #     self.assertEqual(len(cat_data), 14)
+    def test_plot_rest_categories(self):
+        cat_data = plot_rest_categories('South_U_Restaurants.db')
+        self.assertIsInstance(cat_data, dict)
+        self.assertEqual(cat_data, self.cat_dict)
+        self.assertEqual(len(cat_data), 14)
 
     # def test_find_rest_in_building(self):
     #     restaurant_list = find_rest_in_building(1140, 'South_U_Restaurants.db')
