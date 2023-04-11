@@ -1,7 +1,7 @@
-# Your name: 
-# Your student id:
-# Your email:
-# List who you have worked with on this homework:
+# Your name: Emy KLepacki
+# Your student id: 55166246
+# Your email: klepacki@umich.edu
+# List who you have worked with on this homework: no one
 
 import matplotlib.pyplot as plt
 import os
